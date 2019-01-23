@@ -1,0 +1,62 @@
+main{
+    margin: 10px auto;
+    min-height: 550px;
+    width: 70%;
+    background-color: #ddd;
+    border-radius: 20px;
+    overflow: auto;
+}
+
+#result{
+    width: 95%;
+    height: 80px;
+    background-color: #333;
+    margin: 20px auto;
+    border-radius: 5px
+}
+
+#result p{
+    font-size: 2.5em;
+    line-height: 1em;
+    margin: 0;
+    padding-left: 20px;
+    color: #fff;
+    padding-top: 7px;
+}
+
+#result .textbox{font-size: 1.5em;}
+
+.container-fluid{padding-left: 20px;}
+
+main .col-xs-4{
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+main .btn-default{
+    border-color: #333;
+    width: 80%;
+    height: 56px;
+    box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),
+            inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),
+            inset 0 0 0em 0.05em rgba(255,255,255,0.12);
+
+}
+
+main .btn-default:hover{
+    background-color: #333;
+    color: #ddd;
+    font-weight: bold;
+    transition: all 0.5s ease-in-out
+}
+
+main .btn-default:disabled, main .btn-default:disabled:disabled{
+    color: #000;
+    background-color: #EEE;
+    opacity: 1;
+    font-weight: normal;
+    box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),
+            inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),
+            inset 0 0 0em 0.05em rgba(255,255,255,0.12);
+    cursor: default;
+}
