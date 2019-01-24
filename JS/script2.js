@@ -8,7 +8,7 @@ var equation = document.querySelectorAll("#result p")[0],
     squareBtn = document.querySelector('.square'),
     equalBtn = document.querySelector('button.equal'),
     pointBtn = document.querySelector('.point'),
-    eqn = '', point = false, showResult = false, angle;
+    eqn = '', point = false, showResult = false, angle, op;
 
 
 function disablBtn(bool){
@@ -20,8 +20,8 @@ function disablBtn(bool){
 }
 
 function clear(){
-    result.innerHTML = "";
-    equation.innerHTML = "";
+    result.textContent = "";
+    equation.textContent = "";
     eqn = '';
     disablBtn(true)
     equalBtn.disabled = true;
@@ -32,17 +32,16 @@ function clear(){
 }
 
 function analyzeEqn(){
-    console.log(eqn)
     if(degreeMode.innerHTML === 'Deg'){
-        eqn = eqn.replace('Sin(', 'Math.sin(Math.PI/180*')
-                .replace('Cos(', 'Math.cos(Math.PI/180*')
-                .replace('Tan(', 'Math.tan(Math.PI/180*')
-                .replace('√', 'Math.sqrt')
+        eqn = eqn.replace(/Sin\(/g, 'Math.sin(Math.PI/180*')
+                .replace(/Cos\(/g, 'Math.cos(Math.PI/180*')
+                .replace(/Tan\(/g, 'Math.tan(Math.PI/180*')
+                .replace(/√/g, 'Math.sqrt')
     }else{
-        eqn = eqn.replace('Sin', 'Math.sin')
-                .replace('Cos', 'Math.cos')
-                .replace('Tan', 'Math.tan')
-                .replace('√', 'Math.sqrt')
+        eqn = eqn.replace(/Sin/g, 'Math.sin')
+                .replace(/Cos/g, 'Math.cos')
+                .replace(/Tan/g, 'Math.tan')
+                .replace(/√/g, 'Math.sqrt')
     }
     while(eqn.indexOf('<s') !== -1){
         var index = eqn.indexOf('<s')
@@ -73,9 +72,9 @@ numbers.forEach(number => {
         equalBtn.disabled = false
         if(showResult) clear()
         disablBtn(false);
-        result.innerHTML += number.innerHTML
+        result.innerHTML += this.innerHTML
         // To avoid two points in number
-        if(number.innerHTML === '.' && point === false){
+        if(this.innerHTML === '.' && point === false){
             point = true;
             number.disabled = true
         }
@@ -88,24 +87,27 @@ document.querySelector(".clear").addEventListener("click", clear)
 // Operations buttons
 operations.forEach(operation => {
     operation.addEventListener('click', function(){
+        op = this.textContent;
         if(result.innerHTML === ''){
             if(equation.innerHTML.slice(-1) === '+'
             || equation.innerHTML.slice(-1) === '-'
             || equation.innerHTML.slice(-1) === '*'
-            || equation.innerHTML.slice(-1) === '/'
-            || equation.innerHTML.slice(-1) === 'Mod'){
-                equation.innerHTML = equation.innerHTML.slice(0, -1) + this.innerHTML
+            || equation.innerHTML.slice(-1) === '/'){
+                equation.innerHTML = equation.innerHTML.slice(0, -1) + op
+            }
+            else if(equation.innerHTML.slice(-3) === 'Mod'){
+                equation.innerHTML = equation.innerHTML.slice(0, -3) + op
             }
         }
         else if(result.innerHTML !== 'Infinity'){
             if(showResult){
-                equation.innerHTML = ''
+                equation.textContent = ''
                 eqn = ''
                 showResult = false
             }
-            equation.innerHTML += result.innerHTML + this.innerHTML
+            equation.innerHTML += result.innerHTML + op
             if(operation.innerHTML === 'Mod') eqn += result.innerHTML + '%'
-            else eqn += result.innerHTML + operation.innerHTML
+            else eqn += result.innerHTML + op
             result.innerHTML = ""
             disablBtn(true)
             equalBtn.disabled = true
@@ -121,9 +123,7 @@ triFuns.forEach(element => {
     element.addEventListener('click', function(){
         if(result.innerHTML !== 'Infinity'){
             if(showResult) eqn = ''
-            point = false
-            pointBtn.disabled = false
-            result.innerHTML = element.innerHTML + '(' + result.innerHTML + ')'
+            result.innerHTML = this.innerHTML + '(' + result.innerHTML + ')'
             numbers.forEach(number => number.disabled = true)
             equalBtn.disabled = false
             showResult = false
@@ -134,8 +134,6 @@ triFuns.forEach(element => {
 // Square root button
 sqrtBtn.addEventListener('click', function(){
     if(result.innerHTML !== 'Infinity'){
-        point = false
-        pointBtn.disabled = false
         result.innerHTML = '&radic;(' + result.innerHTML + ')'
         numbers.forEach(number => number.disabled = true)
         equalBtn.disabled = false
@@ -145,8 +143,6 @@ sqrtBtn.addEventListener('click', function(){
 // Square button
 squareBtn.addEventListener('click', function(){
     if(result.innerHTML !== 'Infinity'){
-        point = false
-        pointBtn.disabled = false
         result.innerHTML = result.innerHTML + '<sup>2</sup>'
         numbers.forEach(number => number.disabled = true)
         equalBtn.disabled = false
@@ -155,13 +151,15 @@ squareBtn.addEventListener('click', function(){
 
 // Equal button
 equalBtn.addEventListener('click', function(){
-    equation.innerHTML += result.innerHTML
-    eqn += result.innerHTML + ' '
-    analyzeEqn()
-    result.innerHTML = Number(Math.round(eval(eqn)*100000)/100000)
-    if(result.innerHTML.length > 10) result.innerHTML = 'Infinity'
-    showResult = true;
-    numbers.forEach(number => number.disabled = false)
+    if(!showResult){
+        equation.innerHTML += result.innerHTML
+        eqn += result.innerHTML
+        analyzeEqn()
+        result.innerHTML = Math.round(eval(eqn)*100000)/100000
+        if(result.innerHTML.length > 10) result.innerHTML = 'Infinity'
+        showResult = true;
+        numbers.forEach(number => number.disabled = false)
+    }
 })
 
 // Degree / Radian button
