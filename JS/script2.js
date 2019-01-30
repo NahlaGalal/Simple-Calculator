@@ -5,9 +5,9 @@ var equation = document.querySelectorAll("#result p")[0],
     triFuns = Array.from(document.getElementsByClassName("triFun")),
     degreeMode = document.querySelector('.triMode'),
     sqrtBtn = document.getElementsByClassName('sqrt')[0],
-    squareBtn = document.querySelector('.square'),
-    equalBtn = document.querySelector('button.equal'),
-    pointBtn = document.querySelector('.point'),
+    squareBtn = document.getElementById('square'),
+    equalBtn = document.querySelector('button[disabled]'),
+    pointBtn = document.querySelector('#point'),
     eqn = '', point = false, showResult = false, angle, op;
 
 
@@ -63,7 +63,6 @@ function analyzeEqn() {
 }
 
 disablBtn(true)
-equalBtn.disabled = true
 
 // Numbers buttons
 function clkNumbers(number) {
@@ -78,9 +77,9 @@ function clkNumbers(number) {
     }
 }
 
-for(var i = 0 ; i<numbers.length - 1 ; i++){
+for (var i = 0; i < numbers.length - 1; i++) {
     var number = numbers[i]
-    number.addEventListener('click', function(){
+    number.addEventListener('click', function () {
         clkNumbers(this.innerHTML)
     })
 }
@@ -89,50 +88,57 @@ for(var i = 0 ; i<numbers.length - 1 ; i++){
 numbers.slice(-1)[0].addEventListener('click', clear)
 
 // Operations buttons
-for(var i = 0; i<operations.length ; i++){
+function clkOperation(op) {
+    if (result.innerHTML === '') {
+        if (equation.innerHTML.slice(-1) === '+'
+            || equation.innerHTML.slice(-1) === '-'
+            || equation.innerHTML.slice(-1) === '*'
+            || equation.innerHTML.slice(-1) === '/') {
+            equation.innerHTML = equation.innerHTML.slice(0, -1) + op
+        }
+        else if (equation.innerHTML.slice(-3) === 'Mod') {
+            equation.innerHTML = equation.innerHTML.slice(0, -3) + op
+        } else {
+            equation.innerHTML = '0' + op
+        }
+    }
+    else if (result.innerHTML !== 'Infinity') {
+        if (showResult) {
+            equation.textContent = ''
+            eqn = ''
+            showResult = false
+        }
+        equation.innerHTML += result.innerHTML + op
+        if (op === 'Mod') eqn += result.innerHTML + '%'
+        else eqn += result.innerHTML + op
+        result.innerHTML = ""
+        disablBtn(true)
+        equalBtn.disabled = true
+        pointBtn.disabled = false
+        point = false
+        for (var i = 0; i < numbers.length - 1; i++) numbers[i].disabled = false
+    }
+}
+
+for (var i = 0; i < operations.length; i++) {
     var operation = operations[i]
     operation.addEventListener('click', function () {
-        op = this.textContent;
-        if (result.innerHTML === '') {
-            if (equation.innerHTML.slice(-1) === '+'
-                || equation.innerHTML.slice(-1) === '-'
-                || equation.innerHTML.slice(-1) === '*'
-                || equation.innerHTML.slice(-1) === '/') {
-                equation.innerHTML = equation.innerHTML.slice(0, -1) + op
-            }
-            else if (equation.innerHTML.slice(-3) === 'Mod') {
-                equation.innerHTML = equation.innerHTML.slice(0, -3) + op
-            } else {
-                equation.innerHTML = '0' + op
-            }
-        }
-        else if (result.innerHTML !== 'Infinity') {
-            if (showResult) {
-                equation.textContent = ''
-                eqn = ''
-                showResult = false
-            }
-            equation.innerHTML += result.innerHTML + op
-            if (operation.innerHTML === 'Mod') eqn += result.innerHTML + '%'
-            else eqn += result.innerHTML + op
-            result.innerHTML = ""
-            disablBtn(true)
-            equalBtn.disabled = true
-            pointBtn.disabled = false
-            point = false
-            numbers.forEach(number => number.disabled = false)
-        }
+        clkOperation(this.textContent)
     })
 }
 
+document.querySelector('.mod').addEventListener('click', function () {
+    clkOperation('Mod')
+})
+
 // Trignometric functions buttons
-for(var i = 0 ; i<triFuns.length ; i++){
+for (var i = 0; i < triFuns.length; i++) {
     var element = triFuns[i];
     element.addEventListener('click', function () {
         if (result.innerHTML !== 'Infinity') {
             if (showResult) eqn = ''
             result.innerHTML = this.innerHTML + '(' + result.innerHTML + ')'
-            for(var i = 0 ;i<numbers.length - 1; i++) numbers[i].disabled = true            
+            for (var i = 0; i < numbers.length - 1; i++) numbers[i].disabled = true
             equalBtn.disabled = false
             showResult = false
         }
@@ -143,7 +149,7 @@ for(var i = 0 ; i<triFuns.length ; i++){
 sqrtBtn.addEventListener('click', function () {
     if (result.innerHTML !== 'Infinity') {
         result.innerHTML = '&radic;(' + result.innerHTML + ')'
-        for(var i = 0 ;i<numbers.length - 1; i++) numbers[i].disabled = true
+        for (var i = 0; i < numbers.length - 1; i++) numbers[i].disabled = true
         equalBtn.disabled = false
     }
 })
@@ -152,7 +158,7 @@ sqrtBtn.addEventListener('click', function () {
 squareBtn.addEventListener('click', function () {
     if (result.innerHTML !== 'Infinity') {
         result.innerHTML = result.innerHTML + '<sup>2</sup>'
-        for(var i = 0 ;i<numbers.length - 1; i++) numbers[i].disabled = true        
+        for (var i = 0; i < numbers.length - 1; i++) numbers[i].disabled = true
         equalBtn.disabled = false
     }
 })
@@ -176,8 +182,8 @@ degreeMode.addEventListener('click', function () {
 })
 
 // Keyboard event
-document.addEventListener('keypress', function(evt){
-    if(evt.keyCode >= 48 && evt.keyCode <= 59){
+document.addEventListener('keypress', function (evt) {
+    if (evt.keyCode >= 48 && evt.keyCode <= 59) {
         clkNumbers(evt.key)
     }
 })
