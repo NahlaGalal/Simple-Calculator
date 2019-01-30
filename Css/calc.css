@@ -1,66 +1,80 @@
+body{background-color: #ddd}
+
 main{
-    margin: 10px auto;
-    min-height: 550px;
-    width: 50%;
-    background-color: #ddd;
-    border-radius: 20px;
-    overflow: auto;
+    width: 400px;
+    margin: 0 auto;
+    height: 520px;
+    margin-top: 87px;
+    background-color: #fff;
+    font-family: Cairo;
+    font-size: 25px;
 }
 
-#result{
-    width: 95%;
-    height: 100px;
-    background-color: #333;
-    margin: 20px auto;
-    border-radius: 5px
+main #result{height: 110px;}
+
+main #result p{
+    color: #C03A26;
+    font-size: 45px;
+    margin: 10px;
 }
 
-#result p{
-    font-size: 2.5em;
-    line-height: 1em;
-    margin: 0;
-    padding-left: 20px;
+main #result .textbox{
+    font-size: 25px;
+    color: #333
+}
+
+main button{
+    border-radius: 50%;
+    outline: none
+}
+
+main button:disabled{color: #555}
+
+main button.equal{
+    border-radius: 50px;
+    background-color: #E57325;
     color: #fff;
-    padding-top: 7px;
 }
 
-#result .textbox{font-size: 1.5em;}
-
-.numbers{
-
+main .buttons{
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(5, 60px);
+    grid-template-areas: 
+    "sin cos tann squar oper"
+    "nums nums nums sqrt oper"
+    "nums nums nums deg oper"
+    "nums nums nums mod oper"
+    "nums nums nums equal equal";
+    background: linear-gradient(#333, #444);
+    height: 380px;
+    grid-gap: 20px 10px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 20px;
 }
 
-/* .container-fluid{padding-left: 20px;}
+main .buttons .sin{grid-area: sin}
+main .buttons .cos{grid-area: cos}
+main .buttons .tan{grid-area: tann}
+main .buttons .square{grid-area: squar}
+main .buttons .sqrt{grid-area: sqrt}
+main .buttons .deg{grid-area: deg}
+main .buttons .mod{grid-area: mod}
+main .buttons .Operators{grid-area: oper}
+main .buttons .equal{grid-area: equal}
 
-main .col-xs-4{
-    padding-top: 25px;
-    padding-bottom: 25px;
+main .buttons .Numbers{
+    grid-area: nums;
+    display: grid;
+    grid-gap: 20px 10px;
+    grid-template-columns: repeat(3, 60px);
+    grid-template-rows: repeat(4, 60px)
 }
 
-main .btn-default{
-    border-color: #333;
-    width: 80%;
-    height: 56px;
-    box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),
-            inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),
-            inset 0 0 0em 0.05em rgba(255,255,255,0.12);
-
+main .buttons .Operators{
+    display: grid;
+    grid-template-columns: 63px;
+    grid-template-rows: repeat(4, 63px);
+    grid-gap: 20px 10px;
 }
-
-main .btn-default:hover{
-    background-color: #333;
-    color: #ddd;
-    font-weight: bold;
-    transition: all 0.5s ease-in-out
-}
-
-main .btn-default:disabled, main .btn-default:disabled:disabled{
-    color: #000;
-    background-color: #EEE;
-    opacity: 1;
-    font-weight: normal;
-    box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),
-            inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),
-            inset 0 0 0em 0.05em rgba(255,255,255,0.12);
-    cursor: default;
-} */

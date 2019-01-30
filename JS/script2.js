@@ -33,14 +33,14 @@ function clear() {
 
 function analyzeEqn() {
     if (degreeMode.innerHTML === 'Deg') {
-        eqn = eqn.replace(/Sin\(/g, 'Math.sin(Math.PI/180*')
-            .replace(/Cos\(/g, 'Math.cos(Math.PI/180*')
-            .replace(/Tan\(/g, 'Math.tan(Math.PI/180*')
+        eqn = eqn.replace(/sin\(/g, 'Math.sin(Math.PI/180*')
+            .replace(/cos\(/g, 'Math.cos(Math.PI/180*')
+            .replace(/tan\(/g, 'Math.tan(Math.PI/180*')
             .replace(/√/g, 'Math.sqrt')
     } else {
-        eqn = eqn.replace(/Sin/g, 'Math.sin')
-            .replace(/Cos/g, 'Math.cos')
-            .replace(/Tan/g, 'Math.tan')
+        eqn = eqn.replace(/sin/g, 'Math.sin')
+            .replace(/cos/g, 'Math.cos')
+            .replace(/tan/g, 'Math.tan')
             .replace(/√/g, 'Math.sqrt')
     }
     while (eqn.indexOf('<s') !== -1) {
@@ -52,7 +52,7 @@ function analyzeEqn() {
                 eqn = eqn.replace(y, z)
                 break;
             }
-            if (isNaN(eqn[i] && eqn[i] !== ')')) {
+            if (isNaN(eqn[i]) && eqn[i] !== ')') {
                 y = eqn.slice(i + 1, eqn.indexOf('</sup>') + 6)
                 z = 'Math.pow(' + eqn.slice(i + 1, index) + ', 2)'
                 eqn = eqn.replace(y, z)
@@ -74,21 +74,23 @@ function clkNumbers(number) {
     // To avoid two points in number
     if (number === '.' && point === false) {
         point = true;
-        number.disabled = true
+        pointBtn.disabled = true
     }
 }
 
-numbers.forEach(number => {
+for(var i = 0 ; i<numbers.length - 1 ; i++){
+    var number = numbers[i]
     number.addEventListener('click', function(){
         clkNumbers(this.innerHTML)
     })
-});
+}
 
 // AC button
-document.querySelector(".clear").addEventListener("click", clear)
+numbers.slice(-1)[0].addEventListener('click', clear)
 
 // Operations buttons
-operations.forEach(operation => {
+for(var i = 0; i<operations.length ; i++){
+    var operation = operations[i]
     operation.addEventListener('click', function () {
         op = this.textContent;
         if (result.innerHTML === '') {
@@ -121,26 +123,27 @@ operations.forEach(operation => {
             numbers.forEach(number => number.disabled = false)
         }
     })
-});
+}
 
 // Trignometric functions buttons
-triFuns.forEach(element => {
+for(var i = 0 ; i<triFuns.length ; i++){
+    var element = triFuns[i];
     element.addEventListener('click', function () {
         if (result.innerHTML !== 'Infinity') {
             if (showResult) eqn = ''
             result.innerHTML = this.innerHTML + '(' + result.innerHTML + ')'
-            numbers.forEach(number => number.disabled = true)
+            for(var i = 0 ;i<numbers.length - 1; i++) numbers[i].disabled = true            
             equalBtn.disabled = false
             showResult = false
         }
     })
-});
+}
 
 // Square root button
 sqrtBtn.addEventListener('click', function () {
     if (result.innerHTML !== 'Infinity') {
         result.innerHTML = '&radic;(' + result.innerHTML + ')'
-        numbers.forEach(number => number.disabled = true)
+        for(var i = 0 ;i<numbers.length - 1; i++) numbers[i].disabled = true
         equalBtn.disabled = false
     }
 })
@@ -149,7 +152,7 @@ sqrtBtn.addEventListener('click', function () {
 squareBtn.addEventListener('click', function () {
     if (result.innerHTML !== 'Infinity') {
         result.innerHTML = result.innerHTML + '<sup>2</sup>'
-        numbers.forEach(number => number.disabled = true)
+        for(var i = 0 ;i<numbers.length - 1; i++) numbers[i].disabled = true        
         equalBtn.disabled = false
     }
 })
@@ -163,7 +166,6 @@ equalBtn.addEventListener('click', function () {
         result.innerHTML = Math.round(eval(eqn) * 100000) / 100000
         if (result.innerHTML.length > 10) result.innerHTML = 'Infinity'
         showResult = true;
-        numbers.forEach(number => number.disabled = false)
     }
 })
 
