@@ -16,6 +16,7 @@ main #result p{
     color: #C03A26;
     font-size: 45px;
     margin: 10px;
+    overflow: hidden;
 }
 
 main #result .textbox{
